@@ -117,7 +117,7 @@ df = pd.DataFrame(data)
 
 # # working code starts here. 
 
-# In[ ]:
+# In[4]:
 
 
 import pandas as pd
@@ -218,11 +218,11 @@ absorbances = np.clip(np.random.normal(0.15, 0.84, size=10000), a_min = 0.15, a_
 
 #quick to check to see if we are at 
 
-#if np.sum((absorbances >= 0.34) & (absorbances <= 0.54)) < 1000:
-   # absorbances=np.clip(np.random.normal(0.21, 0.84, size=10000), a_min = 0.15, a_max=0.9)
+for np.sum((absorbances >= 0.34) & (absorbances <= 0.54)) <=1000:
+    #absorbances=np.clip(np.random.normal(0.21, 0.84, size=10000), a_min = 0.15, a_max=0.9)
     #absorbances = np.random.normal(0.21, 0.84, size=1000)
-    #print("Condition met! There are at least 1000 values between 0.35 and 0.54.")
-print(absorbances)
+    
+#print(absorbances)
     
     
 #sample = np.array(target_absorbances)[target_absorbances][:1000]
@@ -258,13 +258,31 @@ drug_candidate.to_csv('drug_candidate.txt', sep='\t', index=False, header=["Samp
 #print(df)
 
 
+# # Search and Set Data 
+# 
+
 # In[ ]:
 
 
 #filtering the target absorbance to make sure that there are at least 1000 data points..not sure if this is the best way to handle this though
 
-target_absorbances = (absorbances >= 0.35) & (absorbances <= 0.54)
+target_absorbances = (absorbances >= 0.35) & (absorbances <= 0.54) #this is essentially useless because doesn't respect the structure of the dataframe just is a conditional essentially 
 sample = np.array(sample_ids)[target_absorbances][:1000] #we want to use 
+
+drug_cand = drug_candidate
+
+# ---  actual filter that is then sent to a txt file. 
+filtered_df = drug_cand[(df["Absorbance"] >= 0.35) & (df['Absorbance'] <= 0.54)]
+filtered_df.to_csv('filtered_df.txt', sep='\t', index=False, header=["Sample ID","Temp","Date","Absorbance"])
+
+
+# display the filtered DataFrame
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
@@ -286,10 +304,10 @@ data.to_csv('candidate.zip', index=False,
     #randomly insert null values 
         # set the probability of a cell being set to NA
 def insert_null_data(dataset): #don't believe this needs a parameter
-         probability = 0.03 #want to keep the number small 
+    probability = 0.03 #want to keep the number small 
 # loop through the DataFrame and set some values to NA
-    for i in range(len(drug_candidate):
-        for col in drug_candidate.columns:
+    for i in range(len(drug_candidate): 
+         for col in drug_candidate.columns:
             if random.random() < probability:
                  df.at[i, col] = np.nan #.loc doesn't really apply here 
 
@@ -342,7 +360,7 @@ g.set_ylim(0.15, 0.9)
 #Axes.set_ylim(self, bottom=None, top=None, emit=True, auto=False, *, ymin=None, ymax=None)
 
 
-# In[32]:
+# In[12]:
 
 
 #unfiltered data 
@@ -351,15 +369,25 @@ import matplotlib.pyplot as plt
 candidate = drug_candidate
 sns.scatterplot(data=drug_candidate, x="Temp", y="Absorbance")
 #took out size parameter
-#sns.jointplot(data=drug_candidate[(drug_candidate["Absorbance"] >= 0.35) & (drug_candidate["Absorbance"] <= 0.54)], x="Temp", y="Absorbance", hue="Range", palette=["pastel], marker="o", edgecolor="black", linewidth=0.5)
+#sns.jointplot(data=drug_candidate[(drug_candidate["Absorbance"] >= 0.35) & (drug_candidate["Absorbance"] <= 0.54)], x="Temp", y="Absorbance", hue="Range", palette=["pastel"], marker="o", edgecolor="black", linewidth=0.5)
 
 highlighted_data = candidate[(candidate["Absorbance"] >= 0.35) & (candidate["Absorbance"] <= 0.54)]
-sns.scatterplot(data=highlighted_data, x="Temp", y="Absorbance", color="red", s=50, alpha=0.5)
-#legend
+sns.scatterplot(data=highlighted_data, x="Temp", y="Absorbance", color="red", s=50, alpha=0.5) #was aiming for hue 
+#legend set? 
 
 #plt.axvspan(20, 30, color='gray', alpha=0.5)
 
 #need to change axes limit -- set limit not working!!!
+
+#Axes.set_ylim(left=0, right=0.9, emit=True, auto=False, xmin=None, xmax=None)
+plt_ylim(0.1 , 1.01) #go beyond the the wanted limit 
+
+#Graph Title -- 
+
+
+
+
+
 
 
 # In[33]:
